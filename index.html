@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Bedrock LLM Chat Application</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar for Authentication -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>AWS Portal Authentication</h3>
+            </div>
+            
+            <div class="auth-section">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter your Windows username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="account-id" class="form-label">AWS Account ID</label>
+                    <input type="text" id="account-id" class="form-control" placeholder="Enter AWS account ID">
+                </div>
+                
+                <div class="form-group">
+                    <label for="region" class="form-label">Region</label>
+                    <select id="region" class="form-control">
+                        <option value="us-east-1">us-east-1</option>
+                        <option value="us-west-2">us-west-2</option>
+                        <option value="eu-west-1">eu-west-1</option>
+                        <option value="ap-southeast-1">ap-southeast-1</option>
+                    </select>
+                </div>
+                
+                <button id="connect-btn" class="btn btn--primary btn--full-width">Connect to AWS</button>
+                
+                <div id="connection-status" class="status-indicator">
+                    <span class="status status--info">Disconnected</span>
+                </div>
+            </div>
+            
+            <div class="session-controls">
+                <button id="clear-chat-btn" class="btn btn--outline btn--full-width" disabled>Clear Chat History</button>
+                <button id="download-chat-btn" class="btn btn--outline btn--full-width" disabled>Download History</button>
+                <button id="disconnect-btn" class="btn btn--secondary btn--full-width" disabled>Disconnect</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="app-header">
+                <h1>AWS Bedrock LLM Chat Application</h1>
+                <p class="app-description">
+                    Connect to AWS Bedrock LLM models through the corporate portal. 
+                    Enter your credentials in the sidebar to begin chatting with AI models.
+                </p>
+            </header>
+
+            <!-- Chat Interface -->
+            <div class="chat-container">
+                <div id="chat-history" class="chat-history">
+                    <div class="welcome-message card">
+                        <div class="card__body">
+                            <h3>Welcome to AWS Bedrock Chat</h3>
+                            <p>Please authenticate using the sidebar to start chatting with AI models.</p>
+                            <div class="sample-prompts">
+                                <h4>Sample Prompts:</h4>
+                                <div class="prompt-suggestions">
+                                    <button class="sample-prompt-btn">What is the capital of the UK?</button>
+                                    <button class="sample-prompt-btn">Explain machine learning in simple terms</button>
+                                    <button class="sample-prompt-btn">Write a Python function to calculate fibonacci numbers</button>
+                                    <button class="sample-prompt-btn">What are the benefits of cloud computing?</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-section">
+                    <div class="input-controls">
+                        <div class="form-group">
+                            <label for="model-select" class="form-label">Select Model</label>
+                            <select id="model-select" class="form-control" disabled>
+                                <option value="anthropic.claude-3-sonnet-20240620-v1:0">Claude 3 Sonnet</option>
+                                <option value="anthropic.claude-3-haiku-20240620-v1:0">Claude 3 Haiku</option>
+                                <option value="amazon.titan-text-express-v1">Titan Text Express</option>
+                            </select>
+                        </div>
+                        
+                        <div class="advanced-settings">
+                            <details class="settings-expander">
+                                <summary>Advanced Settings</summary>
+                                <div class="settings-grid">
+                                    <div class="form-group">
+                                        <label for="max-tokens" class="form-label">Max Tokens</label>
+                                        <input type="number" id="max-tokens" class="form-control" value="4000" min="1" max="8192">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="temperature" class="form-label">Temperature</label>
+                                        <input type="number" id="temperature" class="form-control" value="0.7" min="0" max="1" step="0.1">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="top-p" class="form-label">Top P</label>
+                                        <input type="number" id="top-p" class="form-control" value="0.9" min="0" max="1" step="0.1">
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <div class="prompt-input-container">
+                        <textarea id="prompt-input" class="form-control prompt-textarea" 
+                                placeholder="Enter your prompt here..." rows="4" disabled></textarea>
+                        <button id="send-btn" class="btn btn--primary" disabled>
+                            <span class="btn-text">Send Prompt</span>
+                            <div class="loading-spinner hidden"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-content">
+            <div class="loading-spinner large"></div>
+            <p>Connecting to AWS Portal...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
